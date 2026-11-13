@@ -1,0 +1,177 @@
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,560;1,9..144,560&family=Outfit:wght@400;560;700&display=swap");
+
+:root {
+  --ink: #1a120e;
+  --paper: #f3eadb;
+  --felt: #2a211c;
+  --tile: #3c3028;
+  --tile-edge: #5a4638;
+  --chalk: #f7f1e6;
+  --lacquer: #e25b45;
+  --gold: #e4b15a;
+  --muted: #cbbba6;
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 32px 16px;
+  font-family: Outfit, "Avenir Next", sans-serif;
+  color: var(--paper);
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(226, 91, 69, 0.18), transparent 42%),
+    radial-gradient(ellipse at 50% 100%, rgba(228, 177, 90, 0.12), transparent 46%),
+    var(--ink);
+}
+
+.table {
+  width: min(100%, 420px);
+  text-align: center;
+}
+
+.kicker {
+  margin: 0 0 8px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  font-weight: 560;
+  color: var(--gold);
+}
+
+h1 {
+  margin: 0;
+  font-family: Fraunces, Georgia, serif;
+  font-weight: 560;
+  font-size: clamp(2.6rem, 8vw, 3.6rem);
+  letter-spacing: -0.03em;
+  line-height: 0.95;
+}
+
+.status {
+  margin: 18px 0 22px;
+  min-height: 1.4em;
+  font-size: 1.05rem;
+  font-weight: 560;
+  color: var(--muted);
+}
+
+.status.is-win {
+  color: var(--gold);
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  padding: 14px;
+  border-radius: 28px;
+  background: var(--felt);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 24px 50px rgba(0, 0, 0, 0.35);
+}
+
+.board button {
+  aspect-ratio: 1;
+  border: 1px solid transparent;
+  border-radius: 18px;
+  background: var(--tile);
+  color: var(--chalk);
+  font-family: Fraunces, Georgia, serif;
+  font-size: clamp(2.4rem, 9vw, 3.4rem);
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: inset 0 -8px 0 rgba(0, 0, 0, 0.18);
+  transition: transform 140ms ease, border-color 140ms ease, background 140ms ease;
+}
+
+.board button[data-mark="O"] {
+  color: var(--lacquer);
+}
+
+.board button[data-mark="X"],
+.board button[data-mark="O"] {
+  animation: mark-in 180ms ease-out;
+}
+
+.board button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  border-color: var(--tile-edge);
+  background: #4a3b31;
+}
+
+.board button:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+.board button:disabled {
+  cursor: default;
+}
+
+.board button.is-win {
+  background: #6b5130;
+  border-color: var(--gold);
+  color: var(--gold);
+  animation: mark-in 180ms ease-out, win-glow 900ms ease-in-out 180ms infinite alternate;
+}
+
+.board.is-draw button[data-mark] {
+  color: var(--muted);
+}
+
+.restart {
+  margin-top: 22px;
+  border: 1px solid rgba(243, 234, 219, 0.28);
+  border-radius: 999px;
+  padding: 12px 28px;
+  background: transparent;
+  color: var(--paper);
+  font: inherit;
+  font-weight: 560;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+}
+
+.restart:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.restart:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+@keyframes mark-in {
+  from {
+    transform: scale(0.72);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes win-glow {
+  from {
+    box-shadow: 0 0 0 rgba(228, 177, 90, 0.1);
+  }
+  to {
+    box-shadow: 0 0 22px rgba(228, 177, 90, 0.45);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .board button,
+  .board button.is-win {
+    animation: none;
+    transition: none;
+  }
+}
