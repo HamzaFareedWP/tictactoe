@@ -9,11 +9,45 @@ const cardX = document.querySelector("#card-x");
 const cardO = document.querySelector("#card-o");
 const sizeButtons = [...document.querySelectorAll("[data-size]")];
 
+const scoreEls = {
+  x: document.querySelector("#score-x"),
+  o: document.querySelector("#score-o"),
+  draws: document.querySelector("#score-draws"),
+  total: document.querySelector("#score-total"),
+  nameX: document.querySelector("#score-name-x"),
+  nameO: document.querySelector("#score-name-o"),
+  cardX: document.querySelector("#score-card-x"),
+  cardO: document.querySelector("#score-card-o"),
+  history: document.querySelector("#history"),
+  reset: document.querySelector("#reset-scores"),
+};
+
+const MAX_HISTORY = 8;
+
 let size = 3;
 let board = [];
 let current = "X";
 let locked = false;
 let cells = [];
+let scores = loadJSON("ttt-scores", { X: 0, O: 0, draws: 0 });
+let history = loadJSON("ttt-history", []);
+
+function loadJSON(key, fallback) {
+  try {
+    const value = JSON.parse(localStorage.getItem(key));
+    return value ?? fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+function saveJSON(key, value) {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch {
+    // storage full or blocked: the game still works, it just won't be saved
+  }
+}
 
 function linesFor(n) {
   const lines = [];
@@ -59,6 +93,66 @@ function cellLabel(index, mark) {
   const row = Math.floor(index / size) + 1;
   const col = (index % size) + 1;
   return `Row ${row}, column ${col}, ${mark || "empty"}`;
+}
+
+function saveGame() {
+  saveJSON("ttt-game", { size, board, current });
+}
+
+function loadGame() {
+  const saved = loadJSON("ttt-game", null);
+  if (!saved || saved.size !== size) return null;
+  if (!Array.isArray(saved.board) || saved.board.length !== size * size) return null;
+  if (!saved.board.every((c) => c === null || c === "X" || c === "O")) return null;
+  if (saved.current !== "X" && saved.current !== "O") return null;
+  return saved;
+}
+
+function recordMatch(outcome) {
+  if (outcome === "draw") scores.draws += 1;
+  else scores[outcome] += 1;
+
+  history.unshift({
+    outcome,
+    name: outcome === "draw" ? "" : displayName(outcome),
+    size,
+    moves: board.filter(Boolean).length,
+  });
+  history = history.slice(0, MAX_HISTORY);
+
+  saveJSON("ttt-scores", scores);
+  saveJSON("ttt-history", history);
+}
+
+function renderScore() {
+  scoreEls.nameX.textContent = displayName("X");
+  scoreEls.nameO.textContent = displayName("O");
+  scoreEls.x.textContent = String(scores.X);
+  scoreEls.o.textContent = String(scores.O);
+  scoreEls.draws.textContent = String(scores.draws);
+  scoreEls.total.textContent = String(scores.X + scores.O + scores.draws);
+  scoreEls.cardX.classList.toggle("is-leading", scores.X > scores.O);
+  scoreEls.cardO.classList.toggle("is-leading", scores.O > scores.X);
+
+  scoreEls.history.replaceChildren();
+  if (history.length === 0) {
+    const empty = document.createElement("li");
+    empty.className = "history-empty";
+    empty.textContent = "No matches yet";
+    scoreEls.history.append(empty);
+    return;
+  }
+
+  history.forEach((entry) => {
+    const item = document.createElement("li");
+    const left = document.createElement("span");
+    left.textContent = entry.outcome === "draw" ? "Draw" : `${entry.name} won`;
+    const right = document.createElement("span");
+    right.className = "history-meta";
+    right.textContent = `${entry.size}×${entry.size} · ${entry.moves} moves`;
+    item.append(left, right);
+    scoreEls.history.append(item);
+  });
 }
 
 function buildBoard() {
@@ -118,6 +212,9 @@ function render() {
     name.textContent = displayName(current);
     statusEl.append(name, " to move");
   }
+
+  renderScore();
+  saveGame();
 }
 
 function play(index) {
@@ -125,7 +222,11 @@ function play(index) {
   board[index] = current;
   const result = winnerOf(board, size);
   const draw = !result && board.every(Boolean);
-  if (!result && !draw) current = current === "X" ? "O" : "X";
+
+  if (result) recordMatch(result.player);
+  else if (draw) recordMatch("draw");
+  else current = current === "X" ? "O" : "X";
+
   render();
 }
 
@@ -176,6 +277,15 @@ sizeButtons.forEach((button) => {
 
 restartBtn.addEventListener("click", () => restart({ focus: true }));
 
+scoreEls.reset.addEventListener("click", () => {
+  if (!confirm("Reset all scores and match history?")) return;
+  scores = { X: 0, O: 0, draws: 0 };
+  history = [];
+  saveJSON("ttt-scores", scores);
+  saveJSON("ttt-history", history);
+  renderScore();
+});
+
 const savedSize = Number(localStorage.getItem("ttt-size"));
 if ([3, 4, 5].includes(savedSize)) size = savedSize;
 nameX.value = localStorage.getItem("ttt-name-x") ?? "Player 1";
@@ -184,4 +294,13 @@ sizeButtons.forEach((button) => {
   button.setAttribute("aria-pressed", String(Number(button.dataset.size) === size));
 });
 applyTheme(localStorage.getItem("ttt-theme") === "light" ? "light" : "dark");
-restart();
+
+const savedGame = loadGame();
+if (savedGame) {
+  board = savedGame.board;
+  current = savedGame.current;
+  buildBoard();
+  render();
+} else {
+  restart();
+}

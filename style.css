@@ -192,6 +192,7 @@ h1 {
 .theme:focus-visible,
 .sizes button:focus-visible,
 .restart:focus-visible,
+.reset-scores:focus-visible,
 .player input:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
@@ -233,6 +234,7 @@ h1 {
   position: sticky;
   top: 0;
   height: 100vh;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 28px;
@@ -404,6 +406,130 @@ html[data-theme="dark"] .theme-knob {
   line-height: 1.4;
 }
 
+/* Scoreboard */
+
+.scorecard h3 {
+  margin: 16px 0 8px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.score-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.score-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-width: 0;
+  padding: 12px 6px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--tile) 80%, transparent);
+  text-align: center;
+}
+
+.score-cell.is-leading {
+  border-color: var(--accent);
+  background: var(--win);
+}
+
+.score-name {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.score-num {
+  font-family: Syne, Outfit, sans-serif;
+  font-size: 1.9rem;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.score-cell.is-leading .score-num {
+  color: var(--accent);
+}
+
+.score-sub {
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.score-total {
+  margin: 12px 4px 0;
+  display: flex;
+  justify-content: space-between;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.score-total strong {
+  color: var(--fg);
+}
+
+.history {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.history li {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  font-size: 0.86rem;
+}
+
+.history .history-meta {
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.history li.history-empty {
+  justify-content: center;
+  border-style: dashed;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.reset-scores {
+  margin-top: 14px;
+  width: 100%;
+  padding: 10px 0;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.reset-scores:hover {
+  color: var(--fg);
+  border-color: var(--fg);
+}
+
 @keyframes mark-in {
   from {
     transform: scale(0.8);
@@ -430,6 +556,7 @@ html[data-theme="dark"] .theme-knob {
   .rail {
     position: static;
     height: auto;
+    overflow-y: visible;
     order: 2;
     border-left: 0;
     border-top: 1px solid var(--line);

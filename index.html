@@ -56,6 +56,31 @@
           </div>
           <p class="hint">A win is a full row, column, or diagonal.</p>
         </section>
+
+        <section class="panel scorecard">
+          <h2>Scoreboard</h2>
+          <div class="score-grid">
+            <div class="score-cell" id="score-card-x">
+              <span class="score-name" id="score-name-x">Player 1</span>
+              <span class="score-num" id="score-x">0</span>
+              <span class="score-sub">wins</span>
+            </div>
+            <div class="score-cell score-draws">
+              <span class="score-name">Draws</span>
+              <span class="score-num" id="score-draws">0</span>
+              <span class="score-sub">&nbsp;</span>
+            </div>
+            <div class="score-cell" id="score-card-o">
+              <span class="score-name" id="score-name-o">Player 2</span>
+              <span class="score-num" id="score-o">0</span>
+              <span class="score-sub">wins</span>
+            </div>
+          </div>
+          <p class="score-total">Matches played <strong id="score-total">0</strong></p>
+          <h3>Recent matches</h3>
+          <ol id="history" class="history"></ol>
+          <button id="reset-scores" class="reset-scores" type="button">Reset scores</button>
+        </section>
       </aside>
     </div>
     <script src="script.js"></script>
