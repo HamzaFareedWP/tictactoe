@@ -6,4 +6,4 @@ This is a vanilla Tic-Tac-Toe game. `index.html` is structure, `style.css` is th
 - Follow `SPEC.md` one unchecked item at a time, then stop for review.
 - Explain a function when asked, in plain language, and wait for the next question before changing it.
 - Prefer clear names over comments. Comment only when a line would otherwise hide a rule.
-- Match the existing voice: short status copy, accessible buttons, and the After hours palette already in `style.css`.
+- Match the existing voice: short status copy, accessible controls, named players, and the light and dark palette already in `style.css`.

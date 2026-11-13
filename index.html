@@ -1,29 +1,63 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Tic-Tac-Toe</title>
     <link rel="stylesheet" href="style.css" />
+    <script>
+      document.documentElement.dataset.theme =
+        localStorage.getItem("ttt-theme") === "light" ? "light" : "dark";
+    </script>
   </head>
   <body>
-    <main class="table">
-      <p class="kicker">After hours</p>
-      <h1>Tic-Tac-Toe</h1>
-      <p id="status" class="status" aria-live="polite">X to move</p>
-      <div id="board" class="board" aria-label="Tic-tac-toe board">
-        <button type="button" data-cell="0" aria-label="Top left, empty"></button>
-        <button type="button" data-cell="1" aria-label="Top center, empty"></button>
-        <button type="button" data-cell="2" aria-label="Top right, empty"></button>
-        <button type="button" data-cell="3" aria-label="Middle left, empty"></button>
-        <button type="button" data-cell="4" aria-label="Center, empty"></button>
-        <button type="button" data-cell="5" aria-label="Middle right, empty"></button>
-        <button type="button" data-cell="6" aria-label="Bottom left, empty"></button>
-        <button type="button" data-cell="7" aria-label="Bottom center, empty"></button>
-        <button type="button" data-cell="8" aria-label="Bottom right, empty"></button>
-      </div>
-      <button id="restart" class="restart" type="button">Restart</button>
-    </main>
+    <div class="app">
+      <main class="stage">
+        <p class="kicker">Full line wins</p>
+        <h1>Tic-Tac-Toe</h1>
+        <p id="status" class="status" aria-live="polite">Player 1 to move</p>
+        <div id="board" class="board" data-size="3" aria-label="Tic-tac-toe board"></div>
+        <button id="restart" class="restart" type="button">Play again</button>
+      </main>
+
+      <aside class="rail" aria-label="Game settings">
+        <button id="theme" class="theme" type="button" aria-pressed="true">
+          <span class="theme-track" aria-hidden="true"><span class="theme-knob"></span></span>
+          <span class="theme-copy">
+            <span class="theme-kicker">Appearance</span>
+            <span class="theme-label">Dark</span>
+          </span>
+        </button>
+
+        <section class="panel">
+          <h2>Players</h2>
+          <label class="player" id="card-x">
+            <span class="badge" aria-hidden="true">X</span>
+            <span class="field">
+              <span class="field-label">Player 1</span>
+              <input id="name-x" name="player1" maxlength="18" autocomplete="nickname" value="Player 1" />
+            </span>
+          </label>
+          <label class="player" id="card-o">
+            <span class="badge badge-o" aria-hidden="true">O</span>
+            <span class="field">
+              <span class="field-label">Player 2</span>
+              <input id="name-o" name="player2" maxlength="18" autocomplete="nickname" value="Player 2" />
+            </span>
+          </label>
+        </section>
+
+        <section class="panel">
+          <h2>Grid</h2>
+          <div class="sizes" role="group" aria-label="Grid size">
+            <button type="button" data-size="3" aria-pressed="true">3×3</button>
+            <button type="button" data-size="4" aria-pressed="false">4×4</button>
+            <button type="button" data-size="5" aria-pressed="false">5×5</button>
+          </div>
+          <p class="hint">A win is a full row, column, or diagonal.</p>
+        </section>
+      </aside>
+    </div>
     <script src="script.js"></script>
   </body>
 </html>

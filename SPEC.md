@@ -1,14 +1,20 @@
-# Tic-Tac-Toe visual theme
+# Tic-Tac-Toe
 
-The playable game is already in place: a 3×3 board, alternating X and O, wins on every row, column, and diagonal, and a restart that clears the board and returns the turn to X. This spec is only the look and motion.
+Two players share one board. A win is a full row, column, or diagonal on the current grid. Restart clears the marks and returns the turn to player 1.
 
-Theme: **After hours**. A bar-top board under a warm lamp. Dark walnut, chalk-white X, lacquer-red O, gold for a win. Type is Fraunces for the title and marks, Outfit for the interface.
+## Board
 
-## Checklist
+- [x] Play on 3×3, 4×4, or 5×5. Changing size starts a fresh game.
+- [x] Show whose turn it is by name, and lock the board on a win or a draw.
+- [x] Highlight the winning line and the winner’s name, in the status and on their player card.
 
-- [x] Center a single board on a dark walnut page with a warm lamp glow at the top and a faint gold wash at the bottom.
-- [x] Set the title in Fraunces, with a small gold “After hours” kicker above it and an Outfit status line under it.
-- [x] Style the board as a felt tray of nine raised tiles. X is chalk, O is lacquer red.
-- [x] Animate a mark as it lands, and lift an empty tile on hover. Honor `prefers-reduced-motion`.
-- [x] When someone wins, light the three winning tiles in gold. On a draw, fade both marks.
-- [x] Style Restart as a quiet pill button that picks up the gold accent on hover and keyboard focus.
+## Side rail
+
+- [x] Keep a side rail with an appearance switch for light and dark.
+- [x] Let each player type a name. Empty names fall back to Player 1 and Player 2.
+- [x] Offer 3×3, 4×4, and 5×5 as one segmented control.
+
+## Theme
+
+- [x] Dark is black cloth, chalk X, and acid-lime O. Light is warm paper with a rust accent.
+- [x] Marks land with a short scale-in. Winning cells pulse. Honor reduced motion.
